@@ -20,16 +20,16 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const [isAuthed, setIsAuthed] = useState(false);
 
   useEffect(() => {
+    // This is the corrected useEffect hook.
+    // We rely ONLY on onAuthStateChange, which fires immediately with the
+    // current session state and then listens for changes.
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
       setIsAuthed(!!session?.user);
       setLoading(false);
     });
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setIsAuthed(!!session?.user);
-      setLoading(false);
-    });
-    
+    // The call to getSession() has been removed to prevent race conditions.
+
     return () => subscription.unsubscribe();
   }, []);
 
