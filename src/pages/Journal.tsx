@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
+// import { motion } from "framer-motion"; TO REVERT
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
@@ -54,13 +54,14 @@ const Journal = () => {
 
   return (
     <main className="min-h-screen bg-background">
-      {/* Added motion.section for a smooth fade-in animation */}
-      <motion.section
+      <section className="container py-10 max-w-2xl">
+      {/* Added motion.section for a smooth fade-in animation -- TO REVERT */}        
+      {/*     <motion.section
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
         className="container py-10 max-w-2xl mx-auto"
-      >
+      > */}
         <div className="flex items-center justify-between mb-8">
           {/* Applied the text-glow class to the header */}
           <h1 className="text-4xl font-bold text-primary text-glow tracking-tight">
@@ -112,7 +113,7 @@ const Journal = () => {
             {saving ? "Saving..." : "Save Win"}
           </Button>
         </div>
-      </motion.section>
+      <section>      
     </main>
   );
 };
