@@ -11,6 +11,7 @@ import Journal from "./pages/Journal";
 import MemoryLane from "./pages/MemoryLane";
 import Spark from "./pages/Spark";
 import { supabase } from "@/integrations/supabase/client";
+import { AppLayout } from "@/components/layout/AppLayout"; // Import the new layout
 
 const queryClient = new QueryClient();
 
@@ -23,20 +24,14 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
       setIsAuthed(!!session?.user);
       setLoading(false);
     });
-
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setIsAuthed(!!session?.user);
-      setLoading(false);
-    });
-
     return () => subscription.unsubscribe();
   }, []);
-  
+
   if (loading) {
     return (
       <div className="min-h-screen grid place-items-center bg-background">
         <div className="text-center">
-          <h1 className="text-3xl font-semibold tracking-wide">Limmo</h1>
+          <h1 className="text-3xl font-semibold tracking-wide text-primary text-glow">Limmo</h1>
           <p className="text-muted-foreground mt-2">Loading your space...</p>
         </div>
       </div>
@@ -53,43 +48,27 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
+          {/* The Auth route remains outside the layout */}
           <Route path="/auth" element={<Auth />} />
 
+          {/* Wrap all protected routes in the new AppLayout component */}
           <Route
-            path="/"
+            path="/*"
             element={
               <ProtectedRoute>
-                <Index />
+                <AppLayout>
+                  <Routes>
+                    <Route path="/" element={<Index />} />
+                    <Route path="/journal" element={<Journal />} />
+                    <Route path="/memory-lane" element={<MemoryLane />} />
+                    <Route path="/spark" element={<Spark />} />
+                    {/* The catch-all route for protected pages */}
+                    <Route path="*" element={<NotFound />} />
+                  </Routes>
+                </AppLayout>
               </ProtectedRoute>
             }
           />
-          <Route
-            path="/journal"
-            element={
-              <ProtectedRoute>
-                <Journal />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/memory-lane"
-            element={
-              <ProtectedRoute>
-                <MemoryLane />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/spark"
-            element={
-              <ProtectedRoute>
-                <Spark />
-              </ProtectedRoute>
-            }
-          />
-
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
