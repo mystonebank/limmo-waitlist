@@ -23,20 +23,19 @@ const Index = () => {
   }, []);
 
   return (
-    <main className="min-h-screen bg-background flex items-center justify-center">
-      <section className="container py-20">
-        <header className="text-center mb-12">
-          <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-primary text-glow">Limmo</h1>
-          <p className="mt-3 text-lg text-muted-foreground">How can I help you today?</p>
-        </header>
+    // The <main> and <section> tags are removed, as AppLayout now handles them.
+    <>
+      <header className="text-center mb-12">
+        <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-primary text-glow">Limmo</h1>
+        <p className="mt-3 text-lg text-muted-foreground">How can I help you today?</p>
+      </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card to="/journal" title="Journal" subtitle="Capture a new win" Icon={Edit3} />
-          <Card to="/memory-lane" title="Memory Lane" subtitle="Revisit your journey" Icon={Star} />
-          <Card to="/spark" title="The Spark" subtitle="Find your inner strength" Icon={Zap} />
-        </div>
-      </section>
-    </main>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <Card to="/journal" title="Journal" subtitle="Capture a new win" Icon={Edit3} />
+        <Card to="/memory-lane" title="Memory Lane" subtitle="Revisit your journey" Icon={Star} />
+        <Card to="/spark" title="The Spark" subtitle="Find your inner strength" Icon={Zap} />
+      </div>
+    </>
   );
 };
 
