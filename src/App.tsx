@@ -24,6 +24,12 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
       setIsAuthed(!!session?.user);
       setLoading(false);
     });
+
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setIsAuthed(!!session?.user);
+      setLoading(false);
+    });
+    
     return () => subscription.unsubscribe();
   }, []);
 
