@@ -6,7 +6,7 @@ import { Edit3, Star, Zap } from "lucide-react";
 const StyleInjector = () => (
   <style>{`
     .text-glow {
-      text-shadow: 0 0 20px rgba(229, 231, 235, 0.3), 0 0 25px rgba(209, 213, 219, 0.2);
+      text-shadow: 0 0 20px rgba(229, 231, 235, 0.3), 0 0 25px rgba(209, 213, 219, 0.8);
     }
     .card-glow:hover {
       box-shadow: 0 0 40px rgba(209, 213, 219, 0.15);
@@ -15,7 +15,7 @@ const StyleInjector = () => (
       transition: text-shadow 0.3s ease-in-out;
     }
     .group:hover .icon-glow {
-      text-shadow: 0 0 25px rgba(229, 231, 235, 0.6);
+      text-shadow: 0 0 15px rgba(229, 231, 235, 0.6);
     }
   `}</style>
 );
