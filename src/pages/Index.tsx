@@ -23,8 +23,9 @@ const Index = () => {
   }, []);
 
   return (
-    // The <main> and <section> tags are removed, as AppLayout now handles them.
-    <>
+    // Added a wrapper div with vertical padding to push the content down,
+    // restoring the vertically centered appearance of the hub page.
+    <div className="py-16 sm:py-24">
       <header className="text-center mb-12">
         <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-primary text-glow">Limmo</h1>
         <p className="mt-3 text-lg text-muted-foreground">How can I help you today?</p>
@@ -35,7 +36,7 @@ const Index = () => {
         <Card to="/memory-lane" title="Memory Lane" subtitle="Revisit your journey" Icon={Star} />
         <Card to="/spark" title="The Spark" subtitle="Find your inner strength" Icon={Zap} />
       </div>
-    </>
+    </div>
   );
 };
 
