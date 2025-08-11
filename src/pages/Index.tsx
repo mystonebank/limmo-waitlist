@@ -2,24 +2,6 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Edit3, Star, Zap } from "lucide-react";
 
-// Helper component to inject our custom glow styles
-const StyleInjector = () => (
-  <style>{`
-    .text-glow {
-      text-shadow: 0 0 20px rgba(229, 231, 235, 0.3), 0 0 25px rgba(209, 213, 219, 0.2);
-    }
-    .card-glow:hover {
-      box-shadow: 0 0 40px rgba(209, 213, 219, 0.15);
-    }
-    .icon-glow {
-      transition: text-shadow 0.3s ease-in-out;
-    }
-    .group:hover .icon-glow {
-      text-shadow: 0 0 15px rgba(229, 231, 235, 0.6);
-    }
-  `}</style>
-);
-
 const Card = ({ to, title, subtitle, Icon }: { to: string; title: string; subtitle: string; Icon: any }) => (
   <Link
     to={to}
