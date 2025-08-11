@@ -113,7 +113,7 @@ const Journal = () => {
             {saving ? "Saving..." : "Save Win"}
           </Button>
         </div>
-      <section>      
+      </section>      
     </main>
   );
 };
