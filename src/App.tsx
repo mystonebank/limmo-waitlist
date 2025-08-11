@@ -18,7 +18,6 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const [loading, setLoading] = useState(true);
   const [isAuthed, setIsAuthed] = useState(false);
 
-  {/*
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
       setIsAuthed(!!session?.user);
@@ -32,21 +31,6 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
 
     return () => subscription.unsubscribe();
   }, []);
-  */}
-
-  useEffect(() => {
-    // onAuthStateChange fires immediately with the current session,
-    // so we don't need getSession() as well. This simplifies the logic.
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setIsAuthed(!!session?.user);
-      setLoading(false);
-    });
-
-    // Cleanup subscription on unmount
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, []); // Empty dependency array ensures this runs only once on mount
   
   if (loading) {
     return (
