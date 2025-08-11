@@ -15,7 +15,7 @@ const StyleInjector = () => (
       transition: text-shadow 0.3s ease-in-out;
     }
     .group:hover .icon-glow {
-      text-shadow: 0 0 15px rgba(229, 231, 235, 0.6);
+      text-shadow: 0 0 25px rgba(229, 231, 235, 0.6);
     }
   `}</style>
 );
