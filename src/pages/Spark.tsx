@@ -13,7 +13,6 @@ const suggestions = [
 
 type Win = { content: string };
 
-// New loader component using the CSS we added
 const SparkleLoader = () => (
   <div className="flex justify-center items-center py-8">
     <div className="sparkle-loader">
@@ -34,7 +33,6 @@ const Spark = () => {
     const meta = document.querySelector('meta[name="description"]');
     if (meta) meta.setAttribute("content", "Get a personalized nudge from your past wins.");
 
-    // Proactively check if the user has any wins to enable/disable the feature
     const checkWins = async () => {
       const { data } = await supabase.from("wins").select("content").limit(1);
       if (data) {
@@ -66,7 +64,6 @@ const Spark = () => {
 
     const out = `${base} Look back: ${sample}. These are proof you move forward—even on tough days. You've got this.`;
 
-    // Small delay to simulate thinking
     await new Promise((r) => setTimeout(r, 800));
     setMessage(out);
     setLoading(false);
@@ -74,7 +71,7 @@ const Spark = () => {
 
   const renderContent = () => {
     if (!hasCheckedWins) {
-      return <div className="h-40" />; // Placeholder for loading state
+      return <div className="h-40" />;
     }
 
     if (wins.length === 0) {
@@ -123,17 +120,10 @@ const Spark = () => {
   };
 
   return (
-    <main className="min-h-screen bg-background">
-      <section className="container py-10 max-w-2xl">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-4xl font-bold text-primary text-glow tracking-tight">The Spark</h1>
-          <Link to="/" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-            Back to Hub
-          </Link>
-        </div>
-        {renderContent()}
-      </section>
-    </main>
+    // The <main> and <section> tags and the header are removed.
+    <>
+      {renderContent()}
+    </>
   );
 };
 
