@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
 import { PlusCircle } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 type Win = {
   id: string;
@@ -53,9 +54,22 @@ const MemoryLane = () => {
     return wins.filter((w) => w.tags?.includes(filter));
   }, [wins, filter]);
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.07 },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: { y: 0, opacity: 1 },
+    exit: { opacity: 0 },
+  };
+
   return (
-    // The <main> and <section> tags and the header are removed.
-    <>
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
       <div className="mb-6 flex flex-wrap gap-3">
         {FILTERS.map((f) => (
           <Button
@@ -71,46 +85,62 @@ const MemoryLane = () => {
       </div>
 
       {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {[...Array(6)].map((_, i) => <SkeletonCard key={i} />)}
-        </div>
-      ) : filtered.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {filtered.map((w) => (
-            <Card key={w.id} className="bg-card/50 border-border/70 card-glow transition-all duration-300 flex flex-col">
-              <CardHeader>
-                <p className="text-sm font-semibold text-primary">
-                  {new Date(w.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-                </p>
-              </CardHeader>
-              <CardContent className="flex-grow flex flex-col justify-between">
-                <p className="text-base text-foreground whitespace-pre-wrap flex-grow">{w.content}</p>
-                {w.tags?.length > 0 && (
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    {w.tags.map((t) => (
-                      <span key={t} className="text-xs capitalize px-2 py-1 rounded-full bg-secondary text-secondary-foreground">
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          ))}
+        <div className="flex flex-col gap-4">
+          {[...Array(3)].map((_, i) => <SkeletonCard key={i} />)}
         </div>
       ) : (
-        <div className="text-center py-20 px-6 rounded-lg border-2 border-dashed border-border/50">
-          <h2 className="text-2xl font-semibold text-primary">Your Lane is Clear</h2>
-          <p className="mt-2 text-muted-foreground">You haven't captured any wins yet. Every great journey starts with a single step.</p>
-          <Button asChild className="mt-6 card-glow">
-            <Link to="/journal">
-              <PlusCircle className="mr-2 h-4 w-4" />
-              Capture Your First Win
-            </Link>
-          </Button>
-        </div>
+        <AnimatePresence>
+          {filtered.length > 0 ? (
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+              // Changed from a grid to a vertical flex column for the newsfeed effect
+              className="flex flex-col gap-4"
+            >
+              {filtered.map((w) => (
+                <motion.div key={w.id} variants={itemVariants} layout>
+                  <Card className="bg-card/50 border-border/70 card-glow transition-all duration-300 flex flex-col h-full">
+                    <CardHeader>
+                      <p className="text-sm font-semibold text-primary">
+                        {new Date(w.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                      </p>
+                    </CardHeader>
+                    <CardContent className="flex-grow flex flex-col justify-between">
+                      <p className="text-base text-foreground whitespace-pre-wrap flex-grow">{w.content}</p>
+                      {w.tags?.length > 0 && (
+                        <div className="mt-4 flex flex-wrap gap-2">
+                          {w.tags.map((t) => (
+                            <span key={t} className="text-xs capitalize px-2 py-1 rounded-full bg-secondary text-secondary-foreground">
+                              {t}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </motion.div>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="text-center py-20 px-6 rounded-lg border-2 border-dashed border-border/50"
+            >
+              <h2 className="text-2xl font-semibold text-primary">Your Lane is Clear</h2>
+              <p className="mt-2 text-muted-foreground">You haven't captured any wins yet. Every great journey starts with a single step.</p>
+              <Button asChild className="mt-6 card-glow">
+                <Link to="/journal">
+                  <PlusCircle className="mr-2 h-4 w-4" />
+                  Capture Your First Win
+                </Link>
+              </Button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       )}
-    </>
+    </motion.div>
   );
 };
 
