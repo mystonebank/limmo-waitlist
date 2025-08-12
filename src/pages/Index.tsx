@@ -46,10 +46,7 @@ const Index = () => {
     visible: {
       y: 0,
       opacity: 1,
-      transition: {
-        duration: 0.5,
-        ease: "easeOut",
-      },
+      transition: { duration: 0.5 },
     },
   };
 
@@ -59,7 +56,7 @@ const Index = () => {
         <motion.header
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, ease: "easeOut" }}
+          transition={{ duration: 0.7 }}
           className="text-center mb-12"
         >
           <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-primary text-glow">Limmo</h1>
