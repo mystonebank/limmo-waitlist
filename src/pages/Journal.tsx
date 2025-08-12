@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
@@ -11,6 +12,7 @@ const TAGS = ["breakthroughs", "feedback", "connections"] as const;
 
 const Journal = () => {
   const { toast } = useToast();
+  const navigate = useNavigate(); // Initialize the navigate function
   const [content, setContent] = useState("");
   const [tags, setTags] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
@@ -45,14 +47,13 @@ const Journal = () => {
     if (error) {
       toast({ title: "Could not save", description: error.message });
     } else {
-      setContent("");
-      setTags([]);
       toast({ title: "Win captured!", description: "Keep them coming." });
+      // On success, navigate to the Memory Lane page
+      navigate("/memory-lane");
     }
   };
 
   return (
-    // Wrap the content in a motion.div for a smooth entrance animation.
     <motion.div
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
@@ -70,7 +71,7 @@ const Journal = () => {
       />
 
       <div className="mt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <ToggleGroup type="multiple" value={tags} onValue-change={(v) => setTags(v)}>
+        <ToggleGroup type="multiple" value={tags} onValueChange={(v) => setTags(v)}>
           {TAGS.map((t) => (
             <ToggleGroupItem
               key={t}
