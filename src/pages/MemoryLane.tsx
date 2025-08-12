@@ -15,6 +15,28 @@ type Win = {
 
 const FILTERS = ["all", "breakthroughs", "feedback", "connections"] as const;
 
+// Helper function to format the date into a relative time string
+const formatRelativeTime = (dateString: string): string => {
+  const date = new Date(dateString);
+  const now = new Date();
+  const seconds = Math.round((now.getTime() - date.getTime()) / 1000);
+  const minutes = Math.round(seconds / 60);
+  const hours = Math.round(minutes / 60);
+  const days = Math.round(hours / 24);
+
+  if (seconds < 60) {
+    return "now";
+  } else if (minutes < 60) {
+    return `${minutes}m`;
+  } else if (hours < 24) {
+    return `${hours}h`;
+  } else if (days < 7) {
+    return `${days}d`;
+  } else {
+    return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  }
+};
+
 const SkeletonCard = () => (
   <div className="p-4 rounded-xl border border-border/50 bg-card/50">
     <div className="h-4 bg-muted/50 rounded w-1/3 mb-4 animate-pulse"></div>
@@ -95,18 +117,18 @@ const MemoryLane = () => {
               variants={containerVariants}
               initial="hidden"
               animate="visible"
-              // Changed from a grid to a vertical flex column for the newsfeed effect
               className="flex flex-col gap-4"
             >
               {filtered.map((w) => (
                 <motion.div key={w.id} variants={itemVariants} layout>
                   <Card className="bg-card/50 border-border/70 card-glow transition-all duration-300 flex flex-col h-full">
                     <CardHeader>
-                      <p className="text-sm font-semibold text-primary">
-                        {new Date(w.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                      {/* Using the new function and muted text color */}
+                      <p className="text-xs text-muted-foreground">
+                        {formatRelativeTime(w.created_at)}
                       </p>
                     </CardHeader>
-                    <CardContent className="flex-grow flex flex-col justify-between">
+                    <CardContent className="flex-grow flex flex-col justify-between pt-0">
                       <p className="text-base text-foreground whitespace-pre-wrap flex-grow">{w.content}</p>
                       {w.tags?.length > 0 && (
                         <div className="mt-4 flex flex-wrap gap-2">
