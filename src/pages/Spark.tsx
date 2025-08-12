@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { supabase } from "@/integrations/supabase/client";
 import { Link } from "react-router-dom";
 import { PlusCircle, Zap } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const suggestions = [
   { key: "doubt", label: "Feeling doubtful" },
@@ -43,29 +44,22 @@ const Spark = () => {
     checkWins();
   }, []);
 
+  // This function now calls our new Edge Function
   const generate = async (mood: string) => {
     setLoading(true);
     setMessage(null);
-    const { data } = await supabase
-      .from("wins")
-      .select("content, created_at")
-      .order("created_at", { ascending: false })
-      .limit(20);
 
-    const fetchedWins = (data as Win[] | null) ?? [];
-    const sample = fetchedWins.slice(0, 3).map((w) => `“${w.content}”`).join(" • ");
+    const { data, error } = await supabase.functions.invoke("generate-spark", {
+      body: { mood },
+    });
 
-    const base =
-      mood === "doubt"
-        ? "Feeling doubtful is human."
-        : mood === "stuck"
-        ? "When you're stuck, remember momentum is built one small step at a time."
-        : "You deserve this progress.";
+    if (error) {
+      console.error("Error invoking function:", error);
+      setMessage("Sorry, something went wrong. Please try again in a moment.");
+    } else {
+      setMessage(data.message);
+    }
 
-    const out = `${base} Look back: ${sample}. These are proof you move forward—even on tough days. You've got this.`;
-
-    await new Promise((r) => setTimeout(r, 800));
-    setMessage(out);
     setLoading(false);
   };
 
@@ -76,7 +70,11 @@ const Spark = () => {
 
     if (wins.length === 0) {
       return (
-        <div className="text-center py-16 px-6 rounded-lg border-2 border-dashed border-border/50">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="text-center py-16 px-6 rounded-lg border-2 border-dashed border-border/50"
+        >
           <Zap className="mx-auto h-10 w-10 text-muted-foreground mb-4" />
           <h2 className="text-2xl font-semibold text-primary">Activate The Spark</h2>
           <p className="mt-2 text-muted-foreground">This feature is powered by your own wins. Capture a few to get started.</p>
@@ -86,12 +84,12 @@ const Spark = () => {
               Capture Your First Win
             </Link>
           </Button>
-        </div>
+        </motion.div>
       );
     }
 
     return (
-      <>
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
         <p className="text-muted-foreground mb-4">What's on your mind?</p>
         <div className="flex flex-wrap gap-3 mb-6">
           {suggestions.map((s) => (
@@ -107,24 +105,27 @@ const Spark = () => {
           ))}
         </div>
 
-        {loading && <SparkleLoader />}
-        {message && (
-          <Card className="mt-4 bg-card/50 border-ring/20 card-glow transition-all">
-            <CardContent className="pt-6 text-lg leading-relaxed text-foreground">
-              {message}
-            </CardContent>
-          </Card>
-        )}
+        <AnimatePresence>
+          {loading && (
+            <motion.div key="loader" initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }}>
+              <SparkleLoader />
+            </motion.div>
+          )}
+          {message && (
+            <motion.div key="message" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
+              <Card className="mt-4 bg-card/50 border-ring/20 card-glow transition-all">
+                <CardContent className="pt-6 text-lg leading-relaxed text-foreground">
+                  {message}
+                </CardContent>
+              </Card>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </>
     );
   };
 
-  return (
-    // The <main> and <section> tags and the header are removed.
-    <>
-      {renderContent()}
-    </>
-  );
+  return <>{renderContent()}</>;
 };
 
 export default Spark;
