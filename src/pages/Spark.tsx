@@ -121,7 +121,7 @@ const Spark = () => {
             </motion.div>
           )}
         </AnimatePresence>
-      </>
+      </motion.div>
     );
   };
 
