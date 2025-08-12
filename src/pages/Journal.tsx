@@ -5,6 +5,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Mic } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { motion } from "framer-motion";
 
 const TAGS = ["breakthroughs", "feedback", "connections"] as const;
 
@@ -51,9 +52,12 @@ const Journal = () => {
   };
 
   return (
-    // The <main> and <section> tags are removed.
-    // The header and back link are also removed, as AppLayout handles them.
-    <>
+    // Wrap the content in a motion.div for a smooth entrance animation.
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+    >
       <h1 className="text-4xl font-bold text-primary text-glow tracking-tight mb-8">
         What's a win from today?
       </h1>
@@ -66,7 +70,7 @@ const Journal = () => {
       />
 
       <div className="mt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <ToggleGroup type="multiple" value={tags} onValueChange={(v) => setTags(v)}>
+        <ToggleGroup type="multiple" value={tags} onValue-change={(v) => setTags(v)}>
           {TAGS.map((t) => (
             <ToggleGroupItem
               key={t}
@@ -94,7 +98,7 @@ const Journal = () => {
           {saving ? "Saving..." : "Save Win"}
         </Button>
       </div>
-    </>
+    </motion.div>
   );
 };
 
