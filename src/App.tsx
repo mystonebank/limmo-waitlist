@@ -11,7 +11,7 @@ import Journal from "./pages/Journal";
 import MemoryLane from "./pages/MemoryLane";
 import Spark from "./pages/Spark";
 import { supabase } from "@/integrations/supabase/client";
-import { AppLayout } from "@/components/layout/AppLayout"; // Import the new layout
+import { AppLayout } from "@/components/layout/AppLayout";
 
 const queryClient = new QueryClient();
 
@@ -20,16 +20,10 @@ const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
   const [isAuthed, setIsAuthed] = useState(false);
 
   useEffect(() => {
-    // This is the corrected useEffect hook.
-    // We rely ONLY on onAuthStateChange, which fires immediately with the
-    // current session state and then listens for changes.
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
       setIsAuthed(!!session?.user);
       setLoading(false);
     });
-
-    // The call to getSession() has been removed to prevent race conditions.
-
     return () => subscription.unsubscribe();
   }, []);
 
@@ -54,27 +48,28 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          {/* The Auth route remains outside the layout */}
+          {/* Public route for authentication */}
           <Route path="/auth" element={<Auth />} />
 
-          {/* Wrap all protected routes in the new AppLayout component */}
+          {/* This is the new, corrected layout route structure */}
           <Route
-            path="/*"
+            path="/"
             element={
               <ProtectedRoute>
-                <AppLayout>
-                  <Routes>
-                    <Route path="/" element={<Index />} />
-                    <Route path="/journal" element={<Journal />} />
-                    <Route path="/memory-lane" element={<MemoryLane />} />
-                    <Route path="/spark" element={<Spark />} />
-                    {/* The catch-all route for protected pages */}
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </AppLayout>
+                {/* The AppLayout is now the parent route element */}
+                <AppLayout />
               </ProtectedRoute>
             }
-          />
+          >
+            {/* These routes will render inside AppLayout's <Outlet> */}
+            <Route index element={<Index />} />
+            <Route path="journal" element={<Journal />} />
+            <Route path="memory-lane" element={<MemoryLane />} />
+            <Route path="spark" element={<Spark />} />
+          </Route>
+
+          {/* Catch-all for any other path */}
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
