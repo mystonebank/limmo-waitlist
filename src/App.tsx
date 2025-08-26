@@ -13,7 +13,7 @@ import Spark from "./pages/Spark";
 import { supabase } from "@/integrations/supabase/client";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { PWAUpdate } from "@/components/ui/pwa-update";
-import { updateSW } from "./pwa";
+import { updateSW, setNeedRefreshCallback, clearNeedRefreshCallback } from "./pwa";
 
 const queryClient = new QueryClient();
 
@@ -51,10 +51,10 @@ const App = () => {
     const handleUpdate = () => setShowUpdate(true);
     
     // Set up update listener
-    updateSW.onNeedRefresh = handleUpdate;
+    setNeedRefreshCallback(handleUpdate);
     
     return () => {
-      updateSW.onNeedRefresh = () => {};
+      clearNeedRefreshCallback();
     };
   }, []);
 

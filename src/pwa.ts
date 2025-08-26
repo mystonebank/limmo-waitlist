@@ -1,9 +1,15 @@
 import { registerSW } from 'virtual:pwa-register';
 
+// PWA update handler
+let needRefreshCallback: (() => void) | null = null;
+
 // Register service worker with auto-update
 export const updateSW = registerSW({
   onNeedRefresh() {
-    // Show update notification to user
+    // Call the callback if it exists
+    if (needRefreshCallback) {
+      needRefreshCallback();
+    }
     console.log('New version available');
   },
   onOfflineReady() {
@@ -19,6 +25,16 @@ export const updateSW = registerSW({
     console.error('Service worker registration failed:', error);
   },
 });
+
+// Function to set the refresh callback
+export const setNeedRefreshCallback = (callback: () => void) => {
+  needRefreshCallback = callback;
+};
+
+// Function to clear the refresh callback
+export const clearNeedRefreshCallback = () => {
+  needRefreshCallback = null;
+};
 
 // Check if app is running as PWA
 export const isPWA = () => {
