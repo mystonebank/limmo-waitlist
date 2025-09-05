@@ -6,6 +6,14 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[]
+
 export type Database = {
   // Allows to automatically instanciate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
@@ -14,6 +22,27 @@ export type Database = {
   }
   public: {
     Tables: {
+      waitlist: {
+        Row: {
+          id: string
+          email: string
+          biggest_challenge: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          email: string
+          biggest_challenge?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          email?: string
+          biggest_challenge?: string | null
+          created_at?: string
+        }
+        Relationships: []
+      }
       wins: {
         Row: {
           content: string

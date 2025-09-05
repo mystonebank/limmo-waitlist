@@ -47,53 +47,53 @@ All colors MUST be HSL.
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+  }
 
-    /* Limmo brand additions */
+  .dark {
+    /* Limmo dark theme: Sophisticated black and silver palette */
+    --background: 0 0% 0%;
+    --foreground: 210 6% 85%;
+
+    --card: 0 0% 4%;
+    --card-foreground: 210 6% 85%;
+
+    --popover: 0 0% 4%;
+    --popover-foreground: 210 6% 85%;
+
+    --primary: 210 6% 85%;
+    --primary-foreground: 0 0% 0%;
+
+    --secondary: 0 0% 10%;
+    --secondary-foreground: 210 6% 85%;
+
+    --muted: 0 0% 12%;
+    --muted-foreground: 215 6% 65%;
+
+    --accent: 0 0% 14%;
+    --accent-foreground: 210 6% 85%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 6% 85%;
+
+    --border: 0 0% 18%;
+    --input: 0 0% 18%;
+    --ring: 210 6% 85%;
+
+    --sidebar-background: 0 0% 6%;
+    --sidebar-foreground: 210 6% 85%;
+    --sidebar-primary: 210 6% 85%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 0 0% 10%;
+    --sidebar-accent-foreground: 210 6% 85%;
+    --sidebar-border: 0 0% 14%;
+    --sidebar-ring: 210 6% 85%;
+
+    /* Limmo brand additions for dark mode */
     --silver: 210 6% 85%;
     --silver-dim: 215 6% 65%;
     --glow-ring: 210 6% 85%;
     --gradient-hero: linear-gradient(135deg, hsl(0 0% 6%), hsl(0 0% 0%));
     --gradient-subtle: radial-gradient(800px circle at 50% 20%, hsl(0 0% 16% / 0.35), transparent 60%);
-  }
-
-  .dark {
-    /* Limmo dark theme: black background, silver foreground */
-    --background: 0 0% 0%;
-    --foreground: var(--silver);
-
-    --card: 0 0% 4%;
-    --card-foreground: var(--silver);
-
-    --popover: 0 0% 4%;
-    --popover-foreground: var(--silver);
-
-    --primary: var(--silver);
-    --primary-foreground: 0 0% 0%;
-
-    --secondary: 0 0% 10%;
-    --secondary-foreground: var(--silver);
-
-    --muted: 0 0% 12%;
-    --muted-foreground: var(--silver-dim);
-
-    --accent: 0 0% 14%;
-    --accent-foreground: var(--silver);
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: var(--silver);
-
-    --border: 0 0% 18%;
-    --input: 0 0% 18%;
-    --ring: var(--glow-ring);
-
-    --sidebar-background: 0 0% 6%;
-    --sidebar-foreground: var(--silver);
-    --sidebar-primary: var(--silver);
-    --sidebar-primary-foreground: 0 0% 0%;
-    --sidebar-accent: 0 0% 10%;
-    --sidebar-accent-foreground: var(--silver);
-    --sidebar-border: 0 0% 14%;
-    --sidebar-ring: var(--glow-ring);
   }
 }
 
@@ -108,10 +108,6 @@ All colors MUST be HSL.
 }
 
 @layer components {
-  .text-glow {
-    text-shadow: 0 0 20px rgba(229, 231, 235, 0.3), 0 0 25px rgba(209, 213, 219, 0.2);
-  }
-
   .card-glow:hover {
     box-shadow: 0 0 40px rgba(209, 213, 219, 0.15);
   }
@@ -127,7 +123,7 @@ All colors MUST be HSL.
   .textarea-glow:focus-visible {
     box-shadow: 0 0 25px rgba(209, 213, 219, 0.1);
     border-color: hsl(var(--ring) / 0.5);
-    outline: none; /* Removes the default browser outline */
+    outline: none;
   }  
 
   .input-glow:focus-visible {
@@ -136,7 +132,12 @@ All colors MUST be HSL.
     outline: none;
   }
 
-  /* In src/index.css inside @layer components */
+  /* Respect reduced motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    .firefly-animation {
+      animation: none !important;
+    }
+  }
 
   @keyframes sparkle-loader {
     0% {
