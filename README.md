@@ -1,73 +1,140 @@
-# Welcome to your Lovable project
+# Limmo Waitlist Page
 
-## Project info
+A beautiful, modern waitlist page for Limmo - a private journaling and motivation companion built for first-time founders.
 
-**URL**: https://lovable.dev/projects/9815c54c-47b0-4913-ba5e-adefd1ecc568
+## Features
 
-## How can I edit this code?
+- **Modern Design**: Clean, responsive design with smooth animations
+- **Email Collection**: Collect email addresses for the waitlist
+- **Challenge Feedback**: Optional form to collect founder challenges
+- **Real-time Updates**: Shows current waitlist count
+- **Mobile Responsive**: Works perfectly on all devices
+- **Supabase Integration**: Secure data storage with Supabase
 
-There are several ways of editing your application.
+## Tech Stack
 
-**Use Lovable**
+- **Frontend**: React 18 + TypeScript + Vite
+- **Styling**: Tailwind CSS + shadcn/ui components
+- **Animations**: Framer Motion
+- **Backend**: Supabase (database)
+- **Icons**: Lucide React
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/9815c54c-47b0-4913-ba5e-adefd1ecc568) and start prompting.
+## Getting Started
 
-Changes made via Lovable will be committed automatically to this repo.
+### Prerequisites
 
-**Use your preferred IDE**
+- Node.js 18+ and npm
+- Supabase account and project
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Installation
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd limmo-waitlist-page
+```
 
-Follow these steps:
+2. Install dependencies:
+```bash
+npm install
+```
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+3. Set up environment variables:
+Create a `.env` file with your Supabase credentials:
+```env
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+4. Start the development server:
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+The app will be available at `http://localhost:8080`
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Database Setup
 
-**Use GitHub Codespaces**
+The project requires a Supabase database with a `waitlist` table. Run the following SQL in your Supabase SQL editor:
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+```sql
+CREATE TABLE waitlist (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  email TEXT UNIQUE NOT NULL,
+  biggest_challenge TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
 
-## What technologies are used for this project?
+-- Enable RLS
+ALTER TABLE waitlist ENABLE ROW LEVEL SECURITY;
 
-This project is built with:
+-- Allow inserts for anyone
+CREATE POLICY "Allow public inserts" ON waitlist
+  FOR INSERT WITH CHECK (true);
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+-- Allow updates for existing records
+CREATE POLICY "Allow updates" ON waitlist
+  FOR UPDATE USING (true);
+```
 
-## How can I deploy this project?
+## Deployment
 
-Simply open [Lovable](https://lovable.dev/projects/9815c54c-47b0-4913-ba5e-adefd1ecc568) and click on Share -> Publish.
+### Build for Production
 
-## Can I connect a custom domain to my Lovable project?
+```bash
+npm run build
+```
 
-Yes, you can!
+### Deploy Options
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+- **Vercel**: Connect your GitHub repo and deploy automatically
+- **Netlify**: Drag and drop the `dist` folder
+- **Supabase Edge Functions**: Deploy as a static site
+- **Any static hosting service**: The build output is static files
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+## Project Structure
+
+```
+src/
+├── components/
+│   └── ui/           # shadcn/ui components (button, input, card, etc.)
+├── hooks/
+│   └── use-toast.ts  # Toast notification hook
+├── integrations/
+│   └── supabase/     # Supabase client configuration
+├── lib/
+│   └── utils.ts      # Utility functions
+└── pages/
+    └── Waitlist.tsx  # Main waitlist page component
+```
+
+## Customization
+
+### Colors and Branding
+
+Update the primary color in `tailwind.config.ts`:
+```typescript
+theme: {
+  extend: {
+    colors: {
+      primary: {
+        DEFAULT: "#6366f1", // Change this to your brand color
+        // ... other shades
+      }
+    }
+  }
+}
+```
+
+### Content
+
+Edit `src/pages/Waitlist.tsx` to customize:
+- Headlines and descriptions
+- Features and benefits
+- Waitlist count
+- Form fields
+
+## License
+
+This project is private and proprietary to Limmo.
+# limmo-waitlist
