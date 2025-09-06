@@ -18,6 +18,44 @@ const Waitlist = () => {
   const [waitlistCount, setWaitlistCount] = useState(0);
   const [countLoading, setCountLoading] = useState(true);
   const [recentEmails, setRecentEmails] = useState<string[]>([]);
+  const [currentSparkExample, setCurrentSparkExample] = useState(0);
+
+  // Spark examples for the demo
+  const sparkExamples = [
+    {
+      quote: "pitched 5 investors despite nerves",
+      message: "That shows courage in action — each step like that builds momentum. Keep leaning into the discomfort, it's working."
+    },
+    {
+      quote: "shipped onboarding fix after three late nights",
+      message: "That's proof you can push through stuck points and deliver. Today's challenge is just another step on that path."
+    },
+    {
+      quote: "turned feedback into new beta signup flow",
+      message: "That's your adaptability shining through. Keep shaping and learning — progress follows iteration."
+    },
+    {
+      quote: "met with 3 founders and got product validation",
+      message: "That connection power is already yours. Keep reaching out — your network is one of your strongest assets."
+    },
+    {
+      quote: "first 10 paying customers in a week",
+      message: "That traction is proof the market wants what you're building. Doubt less, share more — momentum is on your side."
+    },
+    {
+      quote: "landed first paying customer after 12 demos",
+      message: "That's proof you turn persistence into traction—take one small step today."
+    }
+  ];
+
+  // Cycle through Spark examples
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSparkExample((prev) => (prev + 1) % sparkExamples.length);
+    }, 4000); // Change every 4 seconds
+
+    return () => clearInterval(interval);
+  }, []);
 
   // Fetch initial waitlist count and recent emails
   useEffect(() => {
@@ -318,7 +356,7 @@ const Waitlist = () => {
                     <img
                       src="/firefly.png"
                       alt="Limmo firefly mascot"
-                      className="w-40 h-40 lg:w-36 lg:h-36 object-contain"
+                      className="w-40 h-40 lg:w-48 lg:h-48 object-contain"
                       style={{
                         filter: 'drop-shadow(0 0 12px rgba(255, 255, 0, 0.4))'
                       }}
@@ -414,40 +452,132 @@ const Waitlist = () => {
             How It Works
           </motion.h2>
 
-          <div className="max-w-2xl mx-auto space-y-8 px-4 md:px-0 md:pl-32">
-            {[
-              {
-                step: "1",
-                title: "Capture your wins in seconds",
-                description: "Voice or text - whatever works for your flow."
-              },
-              {
-                step: "2", 
-                title: "Revisit your memory lane",
-                description: "See your breakthroughs and progress over time."
-              },
-              {
-                step: "3",
-                title: "Get AI sparks when you need them",
-                description: "When you need them most, backed by your own wins."
-              }
-            ].map((item, index) => (
+          <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 items-start">
+            {/* Left Column - Steps */}
+            <div className="space-y-8">
+              {[
+                {
+                  step: "1",
+                  title: "Capture your wins in seconds",
+                  description: "Voice or text - whatever works for your flow."
+                },
+                {
+                  step: "2", 
+                  title: "Revisit your memory lane",
+                  description: "See your breakthroughs and progress over time."
+                },
+                {
+                  step: "3",
+                  title: "Get AI sparks when you need them",
+                  description: "When you need them most, backed by your own wins."
+                }
+              ].map((item, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.1 }}
+                  className="flex items-start gap-6"
+                >
+                  <div className="w-12 h-12 bg-silver rounded-full flex items-center justify-center text-black font-bold text-lg flex-shrink-0 mt-1">
+                    {item.step}
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="font-semibold mb-1 text-silver">{item.title}</h3>
+                    <p className="text-gray-400">{item.description}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Right Column - Spark Demo */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="flex justify-center lg:justify-end relative"
+            >
+              {/* Firefly floating next to demo */}
               <motion.div
-                key={index}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="flex items-start gap-6"
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1, delay: 0.5 }}
+                className="absolute -top-16 lg:-top-4 -left-4 z-10"
               >
-                <div className="w-12 h-12 bg-silver rounded-full flex items-center justify-center text-black font-bold text-lg flex-shrink-0 mt-1">
-                  {item.step}
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-semibold mb-1 text-silver">{item.title}</h3>
-                  <p className="text-gray-400">{item.description}</p>
-                </div>
+                <motion.div
+                  animate={{
+                    y: [0, -6, 0],
+                    rotate: [0, 2, 0],
+                  }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                  className="relative"
+                >
+                  {/* Glow effect */}
+                  <div className="absolute inset-0 bg-gradient-radial from-yellow-400/15 via-yellow-300/8 to-transparent rounded-full blur-lg scale-125"></div>
+                  
+                  <img
+                    src="/firefly_smile.png"
+                    alt="Limmo firefly mascot"
+                    className="w-32 h-32 lg:w-40 lg:h-40 object-contain relative z-10"
+                    style={{
+                      filter: 'drop-shadow(0 0 8px rgba(255, 255, 0, 0.3))'
+                    }}
+                  />
+                </motion.div>
               </motion.div>
-            ))}
+
+              <div className="bg-gray-900 border border-gray-700 rounded-2xl p-6 max-w-sm w-full shadow-2xl">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center">
+                    <Sparkles className="h-4 w-4 text-black" />
+                  </div>
+                  <span className="text-sm font-medium text-silver">Spark</span>
+                </div>
+                
+                <div className="space-y-3">
+                  <motion.div
+                    key={`quote-${currentSparkExample}`}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 1.5 }}
+                    className="text-sm text-gray-300"
+                  >
+                    You wrote{' '}
+                    <span className="text-silver font-medium bg-gray-800 px-2 py-1 rounded">
+                      '{sparkExamples[currentSparkExample].quote}.'
+                    </span>
+                  </motion.div>
+                  
+                  <motion.div
+                    key={`message-${currentSparkExample}`}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.5, delay: 0.2 }}
+                    className="text-sm text-gray-300"
+                  >
+                    {sparkExamples[currentSparkExample].message}
+                  </motion.div>
+                </div>
+                
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 2.4 }}
+                  className="mt-4 pt-4 border-t border-gray-700"
+                >
+                  <div className="flex items-center gap-2 text-xs text-gray-500">
+                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                    <span>AI-powered motivation</span>
+                  </div>
+                </motion.div>
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>
