@@ -502,7 +502,7 @@ const Waitlist = () => {
                 initial={{ opacity: 0, scale: 0.8 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 1, delay: 0.5 }}
-                className="absolute -top-16 lg:-top-4 -left-4 z-10"
+                className="absolute -bottom-8 -right-8 lg:-top-4 lg:-left-4 lg:bottom-auto lg:right-auto z-10"
               >
                 <motion.div
                   animate={{
