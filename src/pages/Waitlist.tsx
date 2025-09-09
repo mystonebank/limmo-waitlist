@@ -452,7 +452,7 @@ const Waitlist = () => {
             How It Works
           </motion.h2>
 
-          <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 items-start">
+          <div className="max-w-4xl mx-auto grid lg:grid-cols-2 gap-8 items-center">
             {/* Left Column - Steps */}
             <div className="space-y-8">
               {[
@@ -495,41 +495,8 @@ const Waitlist = () => {
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.3 }}
-              className="flex justify-center lg:justify-end relative"
+              className="flex justify-center"
             >
-              {/* Firefly floating next to demo */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 1, delay: 0.5 }}
-                className="absolute -bottom-8 -right-8 lg:-top-4 lg:-left-4 lg:bottom-auto lg:right-auto z-10"
-              >
-                <motion.div
-                  animate={{
-                    y: [0, -6, 0],
-                    rotate: [0, 2, 0],
-                  }}
-                  transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                  className="relative"
-                >
-                  {/* Glow effect */}
-                  <div className="absolute inset-0 bg-gradient-radial from-yellow-400/15 via-yellow-300/8 to-transparent rounded-full blur-lg scale-125"></div>
-                  
-                  <img
-                    src="/firefly_smile.png"
-                    alt="Limmo firefly mascot"
-                    className="w-32 h-32 lg:w-40 lg:h-40 object-contain relative z-10"
-                    style={{
-                      filter: 'drop-shadow(0 0 8px rgba(255, 255, 0, 0.3))'
-                    }}
-                  />
-                </motion.div>
-              </motion.div>
-
               <div className="bg-gray-900 border border-gray-700 rounded-2xl p-6 max-w-sm w-full shadow-2xl">
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center">
@@ -538,7 +505,7 @@ const Waitlist = () => {
                   <span className="text-sm font-medium text-silver">Spark</span>
                 </div>
                 
-                <div className="space-y-3">
+                <div className="space-y-3 h-32 flex flex-col justify-center">
                   <motion.div
                     key={`quote-${currentSparkExample}`}
                     initial={{ opacity: 0, y: 10 }}
@@ -559,7 +526,7 @@ const Waitlist = () => {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.5, delay: 0.2 }}
-                    className="text-sm text-gray-300"
+                    className="text-sm text-gray-300 flex-1 flex items-center"
                   >
                     {sparkExamples[currentSparkExample].message}
                   </motion.div>
