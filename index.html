@@ -18,6 +18,14 @@
     <link rel="icon" type="image/png" href="/firefly_tail_icon.png" />
     <link rel="apple-touch-icon" href="/firefly_tail_icon.png" />
 
+    <!-- Amplitude Analytics -->
+    <script src="https://cdn.amplitude.com/libs/analytics-browser-2.11.1-min.js.gz"></script>
+    <script src="https://cdn.amplitude.com/libs/plugin-session-replay-browser-1.8.0-min.js.gz"></script>
+    <script>
+      window.amplitude.add(window.sessionReplay.plugin({sampleRate: 1}));
+      window.amplitude.init('5761ea8c864ae70499f521efcb51dcc1', {"autocapture":{"elementInteractions":true}});
+    </script>
+
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://waitlist.limmo.vip" />    
     <meta property="og:title" content="Limmo — Join the Waitlist" />

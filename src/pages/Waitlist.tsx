@@ -6,6 +6,17 @@ import { motion } from "framer-motion";
 import { CheckCircle, Sparkles, Calendar, Zap, ArrowRight, Users } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { 
+  trackPageView, 
+  trackSectionView, 
+  trackFormInteraction, 
+  trackWaitlistSignup, 
+  trackChallengeSubmission,
+  trackButtonClick,
+  trackSparkExampleView,
+  AMPLITUDE_EVENTS,
+  SECTIONS
+} from "@/lib/amplitude";
 
 const Waitlist = () => {
   const { toast } = useToast();
@@ -48,6 +59,11 @@ const Waitlist = () => {
     }
   ];
 
+  // Track page view on component mount
+  useEffect(() => {
+    trackPageView('Limmo Waitlist');
+  }, []);
+
   // Cycle through Spark examples
   useEffect(() => {
     const interval = setInterval(() => {
@@ -55,6 +71,38 @@ const Waitlist = () => {
     }, 4000); // Change every 4 seconds
 
     return () => clearInterval(interval);
+  }, []);
+
+  // Track spark example views
+  useEffect(() => {
+    trackSparkExampleView(currentSparkExample, sparkExamples[currentSparkExample].quote);
+  }, [currentSparkExample]);
+
+  // Track section views using intersection observer
+  useEffect(() => {
+    const observerOptions = {
+      threshold: 0.5,
+      rootMargin: '0px 0px -100px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const sectionName = entry.target.getAttribute('data-section');
+          if (sectionName) {
+            trackSectionView(sectionName);
+          }
+        }
+      });
+    }, observerOptions);
+
+    // Observe all sections with data-section attribute
+    const sections = document.querySelectorAll('[data-section]');
+    sections.forEach((section) => observer.observe(section));
+
+    return () => {
+      sections.forEach((section) => observer.unobserve(section));
+    };
   }, []);
 
   // Fetch initial waitlist count and recent emails
@@ -95,6 +143,10 @@ const Waitlist = () => {
 
     const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Track button click
+    trackButtonClick('Join Waitlist', { email_length: email.length });
+    
     if (!email.trim()) {
       toast({ title: "Please enter your email", description: "We need your email to add you to the waitlist." });
       return;
@@ -109,11 +161,14 @@ const Waitlist = () => {
 
       if (error) {
         if (error.code === '23505') { // Unique constraint violation
+          trackWaitlistSignup(email.trim(), false, 'duplicate_email');
           toast({ title: "Already on the waitlist!", description: "You're already signed up. We'll notify you when we launch." });
         } else {
+          trackWaitlistSignup(email.trim(), false, 'database_error');
           throw error;
         }
       } else {
+        trackWaitlistSignup(email.trim(), true);
         setSubmitted(true);
         // Increment the waitlist count and add email to recent list after successful submission
         setWaitlistCount(prevCount => prevCount + 1);
@@ -131,6 +186,9 @@ const Waitlist = () => {
   const handleChallengeSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!challenge.trim()) return;
+
+    // Track button click
+    trackButtonClick('Share Challenge', { challenge_length: challenge.length });
 
     setChallengeLoading(true);
     
@@ -153,6 +211,7 @@ const Waitlist = () => {
 
       if (!existingData) {
         console.error("Email not found in waitlist:", email);
+        trackChallengeSubmission(email, challenge, false);
         toast({ title: "Email not found", description: "Please join the waitlist first." });
         return;
       }
@@ -175,11 +234,13 @@ const Waitlist = () => {
         throw error;
       }
       
+      trackChallengeSubmission(email, challenge, true);
       toast({ title: "Thanks for sharing!", description: "This helps us build Limmo for founders like you." });
       setChallenge("");
       setChallengeSubmitted(true);
     } catch (error) {
       console.error("Challenge submission error:", error);
+      trackChallengeSubmission(email, challenge, false);
       toast({ title: "Couldn't save your response", description: "No worries, we'll still keep you updated!" });
     } finally {
       setChallengeLoading(false);
@@ -189,7 +250,7 @@ const Waitlist = () => {
   return (
     <div className="min-h-screen bg-black text-silver">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-black">
+      <section className="relative overflow-hidden bg-black" data-section={SECTIONS.HERO}>
         <div className="absolute inset-0 bg-gradient-to-br from-silver/5 via-transparent to-silver/10"></div>
         
         <div className="relative z-10 container mx-auto px-6 sm:px-4 py-20 flex items-center min-h-screen">
@@ -273,6 +334,8 @@ const Waitlist = () => {
                         placeholder="Enter your email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
+                        onFocus={() => trackFormInteraction(AMPLITUDE_EVENTS.EMAIL_INPUT_FOCUS, 'email', email)}
+                        onBlur={() => trackFormInteraction(AMPLITUDE_EVENTS.EMAIL_INPUT_BLUR, 'email', email)}
                         className="flex-1 bg-gray-900 border-gray-700 text-silver placeholder-gray-500"
                         disabled={loading}
                       />
@@ -308,6 +371,8 @@ const Waitlist = () => {
                         placeholder="What's your biggest founder challenge right now?"
                         value={challenge}
                         onChange={(e) => setChallenge(e.target.value)}
+                        onFocus={() => trackFormInteraction(AMPLITUDE_EVENTS.CHALLENGE_INPUT_FOCUS, 'challenge', challenge)}
+                        onBlur={() => trackFormInteraction(AMPLITUDE_EVENTS.CHALLENGE_INPUT_BLUR, 'challenge', challenge)}
                         className="bg-gray-800 border-gray-700 text-silver placeholder-gray-500"
                         disabled={challengeLoading}
                       />
@@ -371,7 +436,7 @@ const Waitlist = () => {
       </section>
 
       {/* Why Join Limmo Section */}
-      <section className="py-20 px-4">
+      <section className="py-20 px-4" data-section={SECTIONS.WHY_JOIN}>
         <div className="container mx-auto">
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
@@ -422,7 +487,7 @@ const Waitlist = () => {
       </section>
 
       {/* Social Proof */}
-      <section className="py-16 px-4">
+      <section className="py-16 px-4" data-section={SECTIONS.SOCIAL_PROOF}>
         <div className="container mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -441,7 +506,7 @@ const Waitlist = () => {
       </section>
 
       {/* How It Works */}
-      <section className="py-20 px-4">
+      <section className="py-20 px-4" data-section={SECTIONS.HOW_IT_WORKS}>
         <div className="container mx-auto">
           <motion.h2 
             initial={{ opacity: 0, y: 20 }}
@@ -550,7 +615,7 @@ const Waitlist = () => {
       </section>
 
       {/* Footer */}
-      <footer className="py-12 px-4 border-t border-gray-700">
+      <footer className="py-12 px-4 border-t border-gray-700" data-section={SECTIONS.FOOTER}>
         <div className="container mx-auto text-center">
           <p className="text-gray-400 mb-4">
             Limmo is the stigma-free motivation companion for first-time founders.

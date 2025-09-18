@@ -180,4 +180,30 @@ All colors MUST be HSL.
   .sparkle-loader div:nth-child(2) {
     animation-delay: -0.5s;
   } 
+
+  /* NEW: Firefly Loader Animation */
+  @keyframes firefly-bob {
+    0%, 100% {
+      transform: translateY(-4px);
+    }
+    50% {
+      transform: translateY(4px);
+    }
+  }
+
+  @keyframes firefly-glow {
+    0%, 100% {
+      filter: drop-shadow(0 0 12px hsl(50 100% 70% / 0.7));
+    }
+    50% {
+      filter: drop-shadow(0 0 24px hsl(50 100% 70% / 0.9));
+    }
+  }
+
+  .firefly-loader img {
+    animation: 
+      firefly-bob 4s ease-in-out infinite,
+      firefly-glow 2.5s ease-in-out infinite;
+  }
+
 }
