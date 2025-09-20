@@ -46,7 +46,7 @@ const Waitlist = () => {
       message: "That's your adaptability shining through. Keep shaping and learning — progress follows iteration."
     },
     {
-      quote: "met with 3 founders and got product validation",
+      quote: "met with 3 potential clients and got really strong market signals",
       message: "That connection power is already yours. Keep reaching out — your network is one of your strongest assets."
     },
     {
@@ -235,7 +235,7 @@ const Waitlist = () => {
       }
       
       trackChallengeSubmission(email, challenge, true);
-      toast({ title: "Thanks for sharing!", description: "This helps us build Limmo for founders like you." });
+      toast({ title: "Thanks for sharing!", description: "This helps us build Limmo for motivated minds like you." });
       setChallenge("");
       setChallengeSubmitted(true);
     } catch (error) {
@@ -267,11 +267,11 @@ const Waitlist = () => {
             </h1>
             
             <h2 className="text-3xl md:text-4xl font-bold text-silver mb-4">
-              Your pocket cheerleader. Designed for first-time founders.
+              Your pocket cheerleader.
             </h2>
             
             <p className="text-lg md:text-xl text-gray-400 max-w-3xl mb-12">
-              Capture wins, revisit proof, and get AI-powered sparks when doubt hits.
+              Capture wins, revisit proof, and spark encouragement from your own progress.
             </p>
 
             {/* Interactive Section - Progress Bar + Email Form + Firefly */}
@@ -298,7 +298,7 @@ const Waitlist = () => {
                         )}
                       </div>
                       <span className="text-sm text-gray-400 ml-2">
-                        {waitlistCount} founders already joined
+                        {waitlistCount} motivated minds already joined
                       </span>
                     </div>
                     <div className="w-full bg-gray-800 rounded-full h-2">
@@ -312,7 +312,7 @@ const Waitlist = () => {
                   <div className="mb-8 px-4 sm:px-0">
                     <div className="flex items-center justify-between text-sm text-gray-400 mb-2">
                       <span>
-                        {countLoading ? "Loading..." : `${waitlistCount} founders already on the waitlist`}
+                        {countLoading ? "Loading..." : `${waitlistCount} motivated minds already on the waitlist`}
                       </span>
                       <span>Join them today!</span>
                     </div>
@@ -368,7 +368,7 @@ const Waitlist = () => {
                   {!challengeSubmitted ? (
                     <form onSubmit={handleChallengeSubmit} className="space-y-3">
                       <Input
-                        placeholder="What's your biggest founder challenge right now?"
+                        placeholder="What's your biggest challenge right now?"
                         value={challenge}
                         onChange={(e) => setChallenge(e.target.value)}
                         onFocus={() => trackFormInteraction(AMPLITUDE_EVENTS.CHALLENGE_INPUT_FOCUS, 'challenge', challenge)}
@@ -495,11 +495,11 @@ const Waitlist = () => {
             transition={{ duration: 0.6 }}
           >
             <p className="text-lg font-medium mb-4 text-silver">
-              "Built by founders, for founders... because resilience is a founder's superpower."
+              "Built for you who want to stay motivated... using the best source of encouragement: <span className="font-bold italic text-white bg-gradient-to-r from-silver to-white bg-clip-text text-transparent drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]">yourself</span>"
             </p>
 {/*         <div className="flex items-center justify-center gap-2 text-sm text-gray-400">
               <Users className="h-4 w-4" />
-              <span>Launching with early founders from YC & Indie Hackers</span>
+              <span>Launching with early members from YC & Indie Hackers</span>
             </div> */}
           </motion.div>
         </div>
@@ -618,7 +618,7 @@ const Waitlist = () => {
       <footer className="py-12 px-4 border-t border-gray-700" data-section={SECTIONS.FOOTER}>
         <div className="container mx-auto text-center">
           <p className="text-gray-400 mb-4">
-            Limmo is the stigma-free motivation companion for first-time founders.
+            Limmo is your stigma-free motivation companion.
           </p>
           <p className="text-sm text-gray-400">
             Your data, your wins, your spark. Private and secure.
